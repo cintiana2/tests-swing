@@ -1,4 +1,4 @@
-package com.example.test.swing.service;
+package com.example.test.swing.api;
 
 import java.util.HashMap;
 import java.util.Map;
