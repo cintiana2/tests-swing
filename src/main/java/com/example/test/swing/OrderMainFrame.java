@@ -25,7 +25,7 @@ import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
-import com.example.test.swing.model.OrderModel;
+import com.example.test.model.OrderModel;
 import com.example.test.swing.service.OrderApiClient;
 
 public class OrderMainFrame extends JFrame {

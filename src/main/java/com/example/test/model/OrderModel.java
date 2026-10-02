@@ -1,4 +1,4 @@
-package com.example.test.swing.model;
+package com.example.test.model;
 
 import java.util.UUID;
 
