@@ -1,7 +1,5 @@
 package com.example.test.swing;
 
-
-
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.util.List;

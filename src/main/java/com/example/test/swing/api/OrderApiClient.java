@@ -1,5 +1,6 @@
 package com.example.test.swing.api;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -22,6 +23,7 @@ public class OrderApiClient {
             payload.put("id", id);
             payload.put("product", product);
             payload.put("quantity", quantity);
+            payload.put("dataCriacao", LocalDateTime.now().toString());
 
             ResponseEntity<Void> response = restTemplate.postForEntity(BASE_URL, payload, Void.class);
             return response.getStatusCode().is2xxSuccessful();
@@ -37,7 +39,7 @@ public class OrderApiClient {
                 return (String) response.getBody().get("status");
             }
         } catch (Exception e) {
-            // Retorna UNKNOWN caso o backend esteja momentaneamente indisponível
+            
         }
         return "UNKNOWN";
     }

@@ -50,7 +50,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @DisplayName("Deve receber o pedido, chamar OrderService e retornar HTTP 202 Accepted")
+    @DisplayName("Deve receber o pedido, chamar OrderService e retornar 202 ")
     void createOrder_Success() throws Exception {
         UUID orderId = UUID.randomUUID();
         OrderRequestVO requestVO = new OrderRequestVO(orderId, "Notebook", 2, LocalDateTime.now());
@@ -67,7 +67,31 @@ class OrderControllerTest {
     }
 
     @Test
-    @DisplayName("Deve consultar o status do pedido via GET na interface OrderService")
+    @DisplayName("Deve retornar 400 Bad  quando a quantidade for invalida (<= 0)")
+    void createOrder_ValidationError_InvalidQuantity() throws Exception {
+        UUID orderId = UUID.randomUUID();
+        OrderRequestVO requestVO = new OrderRequestVO(orderId, "Smartphone", 0, LocalDateTime.now());
+
+        mockMvc.perform(post("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestVO)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Deve retornar  400  quando o produto estiver em branco")
+    void createOrder_ValidationError_BlankProduct() throws Exception {
+        UUID orderId = UUID.randomUUID();
+        OrderRequestVO requestVO = new OrderRequestVO(orderId, "", 5, LocalDateTime.now());
+
+        mockMvc.perform(post("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestVO)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Deve consultar o status do pedido")
     void getOrderStatus_Success() throws Exception {
         UUID orderId = UUID.randomUUID();
         when(orderService.getOrderStatus(eq(orderId))).thenReturn(OrderStatus.PROCESSING);
