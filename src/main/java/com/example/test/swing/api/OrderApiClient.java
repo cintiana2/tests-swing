@@ -8,12 +8,16 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.test.swing.config.AppConfig;
+
 public class OrderApiClient {
 
-    private static final String BASE_URL = "http://localhost:8080/api/orders";
+    private final String baseUrl;
     private final RestTemplate restTemplate;
 
     public OrderApiClient() {
+        // Obtém obrigatoriamente a URL do arquivo de configuração
+        this.baseUrl = AppConfig.getApiBaseUrl();
         this.restTemplate = new RestTemplate();
     }
 
@@ -25,7 +29,7 @@ public class OrderApiClient {
             payload.put("quantity", quantity);
             payload.put("dataCriacao", LocalDateTime.now().toString());
 
-            ResponseEntity<Void> response = restTemplate.postForEntity(BASE_URL, payload, Void.class);
+            ResponseEntity<Void> response = restTemplate.postForEntity(baseUrl, payload, Void.class);
             return response.getStatusCode().is2xxSuccessful();
         } catch (Exception e) {
             return false;
@@ -34,12 +38,12 @@ public class OrderApiClient {
 
     public String fetchOrderStatus(UUID orderId) {
         try {
-            ResponseEntity<Map> response = restTemplate.getForEntity(BASE_URL + "/status/" + orderId, Map.class);
+            ResponseEntity<Map> response = restTemplate.getForEntity(baseUrl + "/status/" + orderId, Map.class);
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                 return (String) response.getBody().get("status");
             }
         } catch (Exception e) {
-            
+            // Trata indisponibilidade momentânea do serviço
         }
         return "UNKNOWN";
     }
